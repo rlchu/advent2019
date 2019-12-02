@@ -8,7 +8,7 @@
        (map #(Integer/parseInt %))))
 
 (defn fuel-needed [mass]
-  (-  (Math/floor (/ mass 3)) 2))
+  (- (Math/floor (/ mass 3)) 2))
 
 (defn fuel-with-additional-fuels [mass]
   (->> (fuel-needed mass)     ;; calculate fuel-needed pt1 style
