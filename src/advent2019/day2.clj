@@ -1,40 +1,34 @@
-(ns advent2019.day2
-  (:require [clojure.string :as str]))
+(ns advent2019.day2)
 
-(def a [1,9,10,3,2,3,11,0,99,30,40,50])
+;; https://adventofcode.com/2019/day/2
+;; data with 'position 1 and 2 replaced' as per instructions
+(def data [1,12,2,3,1,1,2,3,1,3,4,3,1,5,0,3,2,1,9,19,1,19,5,23,2,23,13,27,1,10,27,31,2,31,6,35,1,5,35,39,1,39,10,43,2,9,43,47,1,47,5,51,2,51,9,55,1,13,55,59,1,13,59,63,1,6,63,67,2,13,67,71,1,10,71,75,2,13,75,79,1,5,79,83,2,83,9,87,2,87,13,91,1,91,5,95,2,9,95,99,1,99,5,103,1,2,103,107,1,10,107,0,99,2,14,0,0])
 
-(partition 4 a)
-
-;; a four-tuple ex: (1 9 10 3)
-;; an int-code-program ex: [1,9,10,3,2,3,11,0,99,30,40,50])
-
-; (defn get-opcode-and-react1
-;   [four-tuple int-code-program]
-;   (let [[opcode p1 p2 swap-position] four-tuple
-;         v1 (nth int-code-program p1)
-;         v2 (nth int-code-program p2)]
-;     (case opcode
-;       1 (assoc int-code-program swap-position (+ v1 v2))
-;       2 (assoc int-code-program swap-position (* v1 v2)))))
-;
-; (get-opcode-and-react [1 9 10 3] a)
-;
-; (get-opcode-and-react [2 3 11 0] (get-opcode-and-react [1 9 10 3] a))
-
-(defn get-opcode-and-react2
-  [int-code-program partitioned-icp]
-  (let [four-tuple (first partitioned-icp)
-        [opcode p1 p2 swap-position] four-tuple
-        v1 (nth int-code-program p1)
-        v2 (nth int-code-program p2)]
-    (println (str "tuple: " four-tuple "    swap-pos: " swap-position))
-    (println (str "v1: " v1 " v2: " v2 " --- opcode: " opcode))
-    (println (str "\npartitioned-icp: " partitioned-icp))
-    (println (str "int-code-program: " int-code-program))
-    (println "-------------")
+(defn check-opcode [fragment]
+  (let [[opcode position1 position2 swap-position] fragment
+        p1-value (nth a position1)
+        p2-value (nth a position2)]
     (case opcode
-      1 (recur (assoc int-code-program swap-position (+ v1 v2)) (rest partitioned-icp)) ;; error is rest, need to re-partition
-      2 (recur (assoc int-code-program swap-position (* v1 v2)) (rest partitioned-icp))
-      99 int-code-program)))
+      1 (assoc data swap-position (+ p1-value p2-value))
+      2 (assoc data swap-position (* p1-value p2-value)))))
 
-(get-opcode-and-react2 a (partition 4 a))
+(defn- opcode-case-and-swap [opcode data swap-position p1-value p2-value]
+  (case opcode
+    1 (assoc data swap-position (+ p1-value p2-value))
+    2 (assoc data swap-position (* p1-value p2-value))))
+
+(defn- translate-positions-to-values [opcode data p1 p2 swap-position]
+  (let [p1-value (nth data p1)
+        p2-value (nth data p2)]
+    (opcode-case-and-swap opcode data swap-position p1-value p2-value)))
+
+(defn check-opcode [data index]
+  (let [fragment #p (nth (partition 4 data) index)
+        [opcode p1 p2 swap-position] fragment]
+    (if (not= 99 opcode)
+      (check-opcode (translate-positions-to-values opcode data p1 p2 swap-position)
+                    (inc index))
+      data)))
+
+(first (check-opcode data 0))
+; => 3895705
