@@ -36,9 +36,16 @@
 (compute 12 2 data)
 ; => 3895705 -- answer to part one
 
+;; we'll make a list comprehension below:
 (def lc (for [x (range 0 100)
               y (range 0 100)]
           [x y]))
 
-(first (drop-while (fn [[x y]] (not= 19690720 (compute x y data))) lc))
-; => 64 17
+(defn attempt-thru-lc []
+  (first (drop-while (fn [[x y]] (not= 19690720 (compute x y data))) lc)))
+;; => [64 17]
+
+(defn answer [[x y]] (+ (* 64 100) 17))
+
+(answer (attempt-thru-lc))
+;; => 6417
