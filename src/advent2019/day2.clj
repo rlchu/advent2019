@@ -18,8 +18,8 @@
   (let [fragment (nth (partition 4 data) index)
         [opcode p1 p2 swap-position] fragment]
     (if (not= 99 opcode)
-      (check-opcode (translate-positions-to-values opcode data p1 p2 swap-position)
-                    (inc index))
+      (recur (translate-positions-to-values opcode data p1 p2 swap-position)
+             (inc index))
       data)))
 
 (first (check-opcode data 0))
