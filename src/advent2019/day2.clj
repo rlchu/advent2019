@@ -52,6 +52,8 @@
 
 ;; this solution from reddit is much faster :)
 ;; should always go for the reduce over the recursion :)
+;; reducing over the indexes (range 0 (count program) 4))
+;; i much prefer over my consistent 'partition' calls :)
 ; (def INPUT (slurp "src/advent2019/day02.txt"))
 ;
 ; (defn make-computer [int-code noun verb]
