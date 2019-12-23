@@ -41,7 +41,7 @@
           [x y]))
 
 (defn attempt-thru-lc []
-  (first (drop-while (fn [[x y]] (= 19690720 (compute x y data))) lc)))
+  (first (filter (fn [[x y]] (= 19690720 (compute x y data))) lc)))
 ;; => [64 17]
 
 (defn answer [[x y]] (+ (* x 100) y))
