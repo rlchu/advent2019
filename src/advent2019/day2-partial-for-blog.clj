@@ -1,6 +1,11 @@
 (ns advent2019.day2
   (:require [clojure.string :as str]))
 
+;; why chose to recur instead of reduce
+
+;;; want to do the part about not using 'let' as your data
+;; transformation pipeline and then using #p to debug
+
 (def data [1,9,10,3,2,3,11,0,99,30,40,50])
 
 (def index 0)
@@ -40,3 +45,14 @@
     (when (not= 99 opcode)  ;; oops no when get recur error
       swapped-data
       (recur data (inc index)))))
+
+;; notes p2
+
+; screams list comprehension
+;
+;
+; (defn attempt-thru-lc []
+;   (first (drop-while (fn [[x y]] (not= 19690720 (compute x y data))) lc)))
+; ;; => [64 17]
+;
+; attempted take-whiel first
