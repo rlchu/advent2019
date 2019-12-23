@@ -48,3 +48,35 @@
 
 (time (answer (attempt-thru-lc)))
 ;; => 6417
+
+
+;; this solution from reddit is much faster :)
+;; should always go for the reduce over the recursion :)
+; (def INPUT (slurp "src/advent2019/day02.txt"))
+;
+; (defn make-computer [int-code noun verb]
+;   (let [numbers (vec (->> (clojure.string/split int-code #",")
+;                           (map read-string)))]
+;     (assoc numbers 1 noun 2 verb)))
+;
+; (defn evolve
+;   [stack start]
+;   (let [opcode (get stack start)
+;         num1 (get stack (get stack (inc start)))
+;         num2 (get stack (get stack (+ start 2)))
+;         addr (get stack (+ start 3))]
+;     (cond (= 1 opcode) (assoc stack addr (+ num1 num2))
+;           (= 2 opcode) (assoc stack addr (* num1 num2))
+;           (= 99 opcode) (reduced stack))))
+;
+; (defn execute-program [int-code noun verb]
+;   (let [program (make-computer int-code noun verb)]
+;     (first (reduce #(evolve %1 %2) program (range 0 (count program) 4)))))
+;
+; (def solution-1 (execute-program INPUT 12 2))
+;
+; (def solution-2
+;   (let [execs (for [noun (range 100) verb (range 100)]
+;                 {:noun noun :verb verb :result (execute-program INPUT noun verb)})
+;         exec (first (filter #(= 19690720 (:result %)) execs))]
+;     (+ (* (:noun exec) 100) (:verb exec))))
