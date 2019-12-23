@@ -41,11 +41,10 @@
           [x y]))
 
 (defn attempt-thru-lc []
-  ;;; had 'drop-while' instead of 'filter' here at first... filter is magnitudes of order faster
-  (first (filter (fn [[x y]] (not= 19690720 (compute x y data))) lc)))
+  (first (drop-while (fn [[x y]] (= 19690720 (compute x y data))) lc)))
 ;; => [64 17]
 
-(defn answer [[x y]] (+ (* 64 100) 17))
+(defn answer [[x y]] (+ (* x 100) y))
 
 (time (answer (attempt-thru-lc)))
 ;; => 6417
