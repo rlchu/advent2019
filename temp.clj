@@ -37,11 +37,16 @@
 ;; and calls (dispatches) the proper function above ^^
 ;; seems a good chance to use multimethods:
 ;; https://www.braveclojure.com/multimethods-records-protocols/
-(defmulti make-wires (fn [code _ _] (first code)))
+(defmulti make-wires (fn [code _] (first code)))
 (defmethod make-wires \R
-  [_ point distance]
-  (R-points point distance))
+  [code point]
+  (R-points point (Character/digit (last code) 10)))
 
-(make-wires "R8" [1 1] 8)
+(make-wires "R8" [1 1])
+
+; => ([1 1] [2 1] [3 1] [4 1] [5 1] [6 1] [7 1] [8 1] [9 1])
 ;; oh hm at the repl is there a gotcha in multimethod redefinition?
 ;; => https://clojuredocs.org/clojure.core/defmulti#example-55d9e498e4b0831e02cddf1b
+
+;; could put the specific X-points definitions in our multimethods, but sometimes
+;; a little repetition is more clear than over-abstraction
