@@ -37,14 +37,36 @@
 ;; and calls (dispatches) the proper function above ^^
 ;; seems a good chance to use multimethods:
 ;; https://www.braveclojure.com/multimethods-records-protocols/
+
+(defn extract-distance [code]
+  (Integer. (apply str (drop 1 code))))
+
+(extract-distance "R384")
+; => 384
+
 (defmulti make-wires (fn [code _] (first code)))
 (defmethod make-wires \R
   [code point]
   (R-points point (Character/digit (last code) 10)))
+(defmethod make-wires \L
+  [code point]
+  (L-points point (Character/digit (last code) 10)))
+(defmethod make-wires \U
+  [code point]
+  (U-points point (Character/digit (last code) 10)))
+(defmethod make-wires \D
+  [code point]
+  (D-points point (Character/digit (last code) 10)))
+
+(Character/digit (last "R8") 10)
+;=> 8
+;; just noticed going to be a problem when the distance is > 9 .. whoops
+
 
 (make-wires "R8" [1 1])
-
 ; => ([1 1] [2 1] [3 1] [4 1] [5 1] [6 1] [7 1] [8 1] [9 1])
+(make-wires "U3" [0 0])
+; => ([0 0] [0 1] [0 2] [0 3])
 ;; oh hm at the repl is there a gotcha in multimethod redefinition?
 ;; => https://clojuredocs.org/clojure.core/defmulti#example-55d9e498e4b0831e02cddf1b
 
