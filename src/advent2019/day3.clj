@@ -15,7 +15,7 @@
 (defn extract-distance [code]
   (Integer. (apply str (drop 1 code))))
 
-;; cond is likely faster than multimethod ? 
+;; cond is likely faster than multimethod ?
 (defmulti make-wires (fn [code _] (first code)))
 
 (defmethod make-wires \R
@@ -45,14 +45,14 @@
 (def data-1 (clojure.string/split (first data) #","))
 (def data-2 (clojure.string/split (last data) #","))
 
-(def wire-1
-  (set (reduce form-full-wire-from-codes [[0 0]] data-1)))
+(defn wire-1 []
+  (reduce form-full-wire-from-codes [[0 0]] data-1))
 
-(def wire-2
-  (set (reduce form-full-wire-from-codes [[0 0]] data-2)))
+(defn wire-2 []
+  (reduce form-full-wire-from-codes [[0 0]] data-2))
 
 (defn answer-1 []
-  (->> (clojure.set/intersection wire-1 wire-2)
+  (->> (clojure.set/intersection (set (wire-1)) (set (wire-2)))
        (group-by manhattan-distance)
        sort
        rest
