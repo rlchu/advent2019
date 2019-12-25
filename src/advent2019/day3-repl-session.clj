@@ -114,6 +114,12 @@
     coll
     (concat coll (make-wires code (last coll)))))
 
+; i worry about concat -- conj via apply seems better:
+; (defn form-full-wire-from-codes [coll code]
+;   (if (nil? code)  ;; probably no longer need this nil check
+;     coll
+;     #p (apply conj coll (vec (make-wires code (last coll))))))
+
 (reduce form-full-wire-from-codes [[0 0]] ["R8" "U5" "L5" "D3"])
 (reduce form-full-wire-from-codes [[0 0]] ["U7" "R6" "D4" "L4"])
 
@@ -121,18 +127,29 @@
 (def b (set (reduce form-full-wire-from-codes [[0 0]] ["U7" "R6" "D4" "L4"])))
 
 (clojure.set/intersection a b)
+; => #{[0 0] [3 3] [6 5]}
 
 (defn manhattan-distance [[x y]]
   (+ (Math/abs x) (Math/abs y)))
+
+(sort (group-by manhattan-distance (clojure.set/intersection a b)))
+
+(->> (clojure.set/intersection a b)
+     (group-by manhattan-distance)
+     sort
+     rest
+     ffirst)
 
 ;;;
 (def data
   (->> "src/advent2019/data/day3.txt"
        slurp
        clojure.string/split-lines))
+
 (def b1 (clojure.string/split b #","))
+
 (def d (set (reduce form-full-wire-from-codes [[0 0]] b1)))
 
 ;; (sort (group-by manhattan-distance (clojure.set/intersection c d)))
 
-;; seems slow -- perhaps cond or protocols over multimethods? 
+;; seems slow -- perhaps cond or protocols over multimethods?
