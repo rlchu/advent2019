@@ -22,13 +22,13 @@
 ; => ([1 1] [2 1] [3 1] [4 1] [5 1] [6 1] [7 1] [8 1] [9 1])
 
 (defn L-points [[x y] distance]
-  (for [x-prime (range x (+ (+ 1 x) distance))] [(- 0 x-prime) y]))
+  (for [x-prime (reverse (range (- x distance) x))] [x-prime y]))
 
 (L-points [0 0] 5)
 ; => ([0 0] [-1 0] [-2 0] [-3 0] [-4 0] [-5 0])
 
 (defn D-points [[x y] distance]
-  (for [y-prime (range y (+ (+ 1 y) distance))] [x (- 0 y-prime)]))
+  (for [y-prime (reverse (range (- y distance) y))] [x y-prime]))
 
 (D-points [0 0] 5)
 ; => ([0 0] [0 -1] [0 -2] [0 -3] [0 -4] [0 -5])
@@ -97,6 +97,7 @@
 
 ;; here would be our zero and one case:
 (defn form-full-wire-from-codes [coll code]
+  ;; 'coll' here is more like 'point' :)
   (if (nil? code)
     coll
     (make-wires code coll)))
@@ -106,3 +107,20 @@
 
 (reduce form-full-wire-from-codes [0 0] ["R4"])
 ; => ([0 0] [1 0] [2 0] [3 0] [4 0])
+
+;; for our 'many' case we will need to concat the make-wires result to the coll(ection)
+(defn form-full-wire-from-codes [coll code]
+  (if (nil? code)  ;; probably no longer need this nil check
+    coll
+    (concat coll (make-wires code (last coll)))))
+
+(reduce form-full-wire-from-codes [[0 0]] ["R8" "U5" "L5" "D3"])
+(reduce form-full-wire-from-codes [[0 0]] ["U7" "R6" "D4" "L4"])
+
+(def a (set (reduce form-full-wire-from-codes [[0 0]] ["R8" "U5" "L5" "D3"])))
+(def b (set (reduce form-full-wire-from-codes [[0 0]] ["U7" "R6" "D4" "L4"])))
+
+(clojure.set/intersection a b)
+
+(defn manhattan-distance [[x y]]
+  (+ (Math/abs x) (Math/abs y)))
