@@ -124,3 +124,15 @@
 
 (defn manhattan-distance [[x y]]
   (+ (Math/abs x) (Math/abs y)))
+
+;;;
+(def data
+  (->> "src/advent2019/data/day3.txt"
+       slurp
+       clojure.string/split-lines))
+(def b1 (clojure.string/split b #","))
+(def d (set (reduce form-full-wire-from-codes [[0 0]] b1)))
+
+;; (sort (group-by manhattan-distance (clojure.set/intersection c d)))
+
+;; seems slow -- perhaps cond or protocols over multimethods? 
