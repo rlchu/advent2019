@@ -72,8 +72,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; part 2:
 
-(def data-1 ["R8" "U5" "L5" "D3"])
-(def data-2 ["U7" "R6" "D4" "L4"])
+; (def data-1 ["R8" "U5" "L5" "D3"])
+; (def data-2 ["U7" "R6" "D4" "L4"])
 
 (def wire-1
   (dedupe (reduce form-full-wire-from-codes [[0 0]] data-1)))
@@ -88,7 +88,9 @@
 (def int-indeces-1 (map (juxt #(.indexOf wire-1 %) identity) intersections))
 (def int-indeces-2 (map (juxt #(.indexOf wire-2 %) identity) intersections))
 
-(map #(+ (first %1) (first %2)) int-indeces-1 int-indeces-2)
-
-(map #(identity [(+ (first %1) (first %2)) (last %1)]) int-indeces-1 int-indeces-2)
-(map #(identity [(+ (first %1) (first %2)) (last %1) (last %2)]) int-indeces-1 int-indeces-2)
+(->>
+ (map #(identity [(+ (first %1) (first %2)) (last %1) (last %2)]) int-indeces-1 int-indeces-2)
+ sort
+ rest
+ ffirst)
+;=> 12304
