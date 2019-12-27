@@ -40,7 +40,7 @@
 ;       \D (D-points point distance))))
 
 (defn form-full-wire-from-codes [coll ^String code]
-  (apply conj coll (vec (make-wires code (last coll)))))
+  (apply conj coll (make-wires code (last coll))))
 
 (defn manhattan-distance [[x y]]
   (+ (Math/abs x) (Math/abs y)))
