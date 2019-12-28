@@ -1,11 +1,12 @@
 (ns advent2019.day4)
 
-(defn int->by->decimal [int]
-  (map #(Character/digit % 10) (str int)))
-
-(def data (map int->by->decimal (range 245318 765748)))
-
-(first data)
+;; https://stackoverflow.com/questions/29929325/how-to-split-a-number-in-clojure
+(defn digits [n]
+  (->> n
+       (iterate #(quot % 10))
+       (take-while pos?)
+       (mapv #(mod % 10))
+       rseq))
 
 (defn contains-duplicate-pair? [password]
   (not= (count password) (count (partition-by identity password))))
@@ -18,13 +19,11 @@
 (defn digits-monotonic? [password]
   (reduce monotonic-reducer [] password))
 
-(->> data
-     (filter contains-duplicate-pair?)
-     (filter digits-monotonic?)
-     count)
+(defn answer-1 []
+  (count (sequence (comp (map digits)
+                         (filter digits-monotonic?)
+                         (filter contains-duplicate-pair?))
+                   (range 245318 765748))))
 
-(count (sequence (comp (map int->by->decimal)
-                       (filter contains-duplicate-pair?)
-                       (filter digits-monotonic?)) (range 245318 765748)))
-
-(some #(> (count %) 2) (partition-by identity (list 1 3 3 3 4 4 5)))
+(answer-1)
+; => 1079
