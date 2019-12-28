@@ -27,3 +27,17 @@
 
 (answer-1)
 ; => 1079
+
+;;; for part 2, alter 'contains duplicate pair' to check for a tuple of exclusive length 2:
+
+(defn contains-only-tuple-duplicate-pair? [password]
+  (some #(= 2 (count %)) (partition-by identity password)))
+
+(defn answer-2 []
+  (count (sequence (comp (map digits)
+                         (filter digits-monotonic?)
+                         (filter contains-only-tuple-duplicate-pair?))
+                   (range 245318 765748))))
+
+(answer-2)
+; => 699
