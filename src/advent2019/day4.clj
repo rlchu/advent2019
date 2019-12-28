@@ -11,13 +11,17 @@
 (defn contains-duplicate-pair? [password]
   (some #(<= 2 (count %)) (partition-by identity password)))
 
-(defn monotonic-reducer [col item]
-  (if ((fnil > 0) (last col) item)
-    (reduced false)
-    (conj col item)))
+; (defn monotonic-reducer [col item]
+;   (if ((fnil > 0) (last col) item)
+;     (reduced false)
+;     (conj col item)))
+;
+; (defn digits-monotonic? [password]
+;   (reduce monotonic-reducer [] password))
 
+;; above reduction works, or just "apply <=" :)
 (defn digits-monotonic? [password]
-  (reduce monotonic-reducer [] password))
+  (apply <= password))
 
 (defn answer-1 []
   (count (sequence (comp (map digits)
