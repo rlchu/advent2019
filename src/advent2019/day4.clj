@@ -9,7 +9,7 @@
        rseq))
 
 (defn contains-duplicate-pair? [password]
-  (not= (count password) (count (partition-by identity password))))
+  (some #(<= 2 (count %)) (partition-by identity password)))
 
 (defn monotonic-reducer [col item]
   (if ((fnil > 0) (last col) item)
@@ -27,8 +27,6 @@
 
 (answer-1)
 ; => 1079
-
-;;; for part 2, alter 'contains duplicate pair' to check for a tuple of exclusive length 2:
 
 (defn contains-only-tuple-duplicate-pair? [password]
   (some #(= 2 (count %)) (partition-by identity password)))
