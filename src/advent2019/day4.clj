@@ -1,18 +1,30 @@
 (ns advent2019.day4)
 
-(map identity "111234")
+(defn int->by->decimal [int]
+  (map #(Character/digit % 10) (str int)))
 
-(reduce #(if #p (= (last %1) %2) %1 (conj %1 %2)) [] "123445")
+(def data (map int->by->decimal (range 245318 765748)))
 
-;; break the reduction with true when two equal items are found:
-(reduce #(if (= (last %1) %2) (reduced "true") (conj %1 %2)) [] "12345")
-; => true
+(first data)
 
-(defn password-predicate [col item]
-  (and (= (last col) item) (< (item col) item)))
+(defn contains-duplicate-pair? [password]
+  (not= (count password) (count (partition-by identity password))))
 
-(reduce #(if (password-predicate %1 %2) %1 (conj %1 %2)) [] "12345")
+(defn monotonic-reducer [col item]
+  (if ((fnil > 0) (last col) item)
+    (reduced false)
+    (conj col item)))
 
-(partition-by identity "12345")
+(defn digits-monotonic? [password]
+  (reduce monotonic-reducer [] password))
 
-(map #(Character/digit % 10) "1234")
+(->> data
+     (filter contains-duplicate-pair?)
+     (filter digits-monotonic?)
+     count)
+
+(count (sequence (comp (map int->by->decimal)
+                       (filter contains-duplicate-pair?)
+                       (filter digits-monotonic?)) (range 245318 765748)))
+
+(some #(> (count %) 2) (partition-by identity (list 1 3 3 3 4 4 5)))
